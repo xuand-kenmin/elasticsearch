@@ -1,0 +1,70 @@
+# ======================== Elasticsearch Configuration =========================
+
+# ---------------------------------- Cluster -----------------------------------
+# Đây là tên của cụm (cluster) Elasticsearch. Các node thuộc cùng một cụm cần có chung tên cụm để chúng có thể hoạt động cùng nhau.
+cluster.name: es-cluster
+# Danh sách các node ban đầu có thể làm node master trong quá trình khởi động cụm. Trong trường hợp này, "node-1st" được chỉ định là node ban đầu trong cụm.
+cluster.initial_master_nodes: ["node-1st"]
+# Số lượng shard tối đa mà một node có thể lưu trữ. Shard là các phân vùng nhỏ của chỉ mục dữ liệu.
+cluster.max_shards_per_node: 100000
+# Cấu hình này xác định khoảng thời gian mà Elasticsearch sẽ cập nhật thông tin cụm, ở đây là 1 phút.
+cluster.info.update.interval: 1m
+# Khi true, Elasticsearch sẽ giám sát dung lượng đĩa còn trống và ngăn không cho chỉ mục mới được phân bổ khi dung lượng đĩa còn thấp.
+cluster.routing.allocation.disk.threshold_enabled: true
+
+# Đây là các mức cảnh báo dựa trên dung lượng đĩa còn trống:
+# low: Khi dung lượng còn dưới 10GB, Elasticsearch sẽ ngừng phân bổ shard mới vào node.
+# high: Khi dung lượng còn dưới 5GB, Elasticsearch sẽ cố gắng di chuyển shard ra khỏi node này.
+# flood_stage: Khi dung lượng còn dưới 1GB, Elasticsearch sẽ chuyển chỉ mục sang chế độ chỉ đọc (read-only).
+cluster.routing.allocation.disk.watermark.low: 10gb
+cluster.routing.allocation.disk.watermark.high: 5gb
+cluster.routing.allocation.disk.watermark.flood_stage: 1gb
+
+# ---------------------------------- Network -----------------------------------
+http.port: 9200
+# Cho phép Elasticsearch lắng nghe trên cả địa chỉ cục bộ (_local_) và địa chỉ mạng (_site_). 
+# Điều này có nghĩa là Elasticsearch có thể được truy cập từ cả máy cục bộ và các máy trong cùng mạng.
+http.host: ["_local_", "_site_"]
+    
+# Cổng này được sử dụng để giao tiếp giữa các node trong cụm Elasticsearch. Mặc định, Elasticsearch sử dụng cổng 9300 cho giao tiếp nội bộ giữa các node.
+#transport.tcp.port: 9300
+transport.port: 9300
+
+network.host: 0.0.0.0
+network.bind_host: 0.0.0.0
+network.publish_host: 0.0.0.0
+
+discovery.seed_hosts: ["127.0.0.1"]
+
+# ------------------------------------ Node ------------------------------------
+node.name: node-1st
+node.roles: [master, data, ingest]
+# old version
+#node.master: true                                # cho biết node này có thể làm master, quản lý và điều phối các node khác.
+#node.data: true                                  # node này có thể lưu trữ và quản lý dữ liệu.
+#node.ingest: false                              # Cấu hình này chỉ định node này không phải là node "ingest", tức là không thể thực hiện các pipeline xử lý trước dữ liệu như phân tích hoặc lọc trước khi lưu trữ vào Elasticsearch.
+#node.ml: false                                  # Khi false, tính năng machine learning của Elasticsearch bị tắt.
+#node.max_local_storage_nodes: 10                 # Cấu hình này giới hạn số lượng node Elasticsearch có thể chạy trên cùng một máy tính cục bộ, tối đa là 10 node.
+
+ingest.geoip.downloader.enabled: false           # Tính năng tải xuống cơ sở dữ liệu GeoIP để phân tích vị trí địa lý của các địa chỉ IP bị tắt.
+
+# Add custom attributes to the node:
+#node.attr.rack: r1
+
+# ----------------------------------- Paths ------------------------------------
+path.data: C:\Program Files Additionals\elasticsearch-8.12.0\data          # Đường dẫn lưu trữ dữ liệu Elasticsearch.
+path.logs: C:\Program Files Additionals\elasticsearch-8.12.0\logs          # Đường dẫn lưu trữ các file nhật ký (log).
+path.repo: C:\Program Files Additionals\elasticsearch-8.12.0\repository    # Đường dẫn đến nơi lưu trữ các bản sao lưu dữ liệu Elasticsearch (repository).
+
+# ----------------------------------- Memory -----------------------------------
+# Cấu hình này ngăn Elasticsearch bị hoán đổi bộ nhớ (swap) khi có bộ nhớ vật lý không đủ. 
+# Khi false, Elasticsearch có thể bị hoán đổi, điều này có thể làm giảm hiệu suất. 
+# Khi true, Elasticsearch sẽ khóa dung lượng bộ nhớ RAM để tránh bị hoán đổi.
+bootstrap.memory_lock: true
+
+# Tính năng bảo mật của X-Pack bị tắt. X-Pack là gói mở rộng của Elasticsearch cung cấp tính năng bảo mật, giám sát và machine learning.
+xpack.security.enabled: false
+# Elasticsearch đang sử dụng giấy phép thử nghiệm (trial) cho X-Pack.
+xpack.license.self_generated.type: trial
+# SSL/TLS cho giao tiếp giữa các node trong cụm bị tắt.
+xpack.security.transport.ssl.enabled: false
