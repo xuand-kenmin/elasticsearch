@@ -1,14 +1,21 @@
 # ======================== Elasticsearch Configuration =========================
 
 # ---------------------------------- Cluster -----------------------------------
-# Đây là tên của cụm (cluster) Elasticsearch. Các node thuộc cùng một cụm cần có chung tên cụm để chúng có thể hoạt động cùng nhau.
+# Đây là tên của cụm (cluster) Elasticsearch. 
+# Các node thuộc cùng một cụm cần có chung tên cụm để chúng có thể hoạt động cùng nhau.
 cluster.name: es-cluster
-# Danh sách các node ban đầu có thể làm node master trong quá trình khởi động cụm. Trong trường hợp này, "node-1st" được chỉ định là node ban đầu trong cụm.
+
+# Danh sách các node ban đầu có thể làm node master trong quá trình khởi động cụm. 
+# Trong trường hợp này, "node-1st" được chỉ định là node ban đầu trong cụm.
 cluster.initial_master_nodes: ["node-1st"]
-# Số lượng shard tối đa mà một node có thể lưu trữ. Shard là các phân vùng nhỏ của chỉ mục dữ liệu.
+
+# Số lượng shard tối đa mà một node có thể lưu trữ. 
+# Shard là các phân vùng nhỏ của chỉ mục dữ liệu.
 cluster.max_shards_per_node: 100000
+
 # Cấu hình này xác định khoảng thời gian mà Elasticsearch sẽ cập nhật thông tin cụm, ở đây là 1 phút.
 cluster.info.update.interval: 1m
+
 # Khi true, Elasticsearch sẽ giám sát dung lượng đĩa còn trống và ngăn không cho chỉ mục mới được phân bổ khi dung lượng đĩa còn thấp.
 cluster.routing.allocation.disk.threshold_enabled: true
 
@@ -39,6 +46,7 @@ discovery.seed_hosts: ["127.0.0.1"]
 # ------------------------------------ Node ------------------------------------
 node.name: node-1st
 node.roles: [master, data, ingest]
+
 # old version
 #node.master: true                                # cho biết node này có thể làm master, quản lý và điều phối các node khác.
 #node.data: true                                  # node này có thể lưu trữ và quản lý dữ liệu.
@@ -52,9 +60,9 @@ ingest.geoip.downloader.enabled: false           # Tính năng tải xuống cơ
 #node.attr.rack: r1
 
 # ----------------------------------- Paths ------------------------------------
-path.data: C:\Program Files Additionals\elasticsearch-8.12.0\data          # Đường dẫn lưu trữ dữ liệu Elasticsearch.
-path.logs: C:\Program Files Additionals\elasticsearch-8.12.0\logs          # Đường dẫn lưu trữ các file nhật ký (log).
-path.repo: C:\Program Files Additionals\elasticsearch-8.12.0\repository    # Đường dẫn đến nơi lưu trữ các bản sao lưu dữ liệu Elasticsearch (repository).
+path.data: .\data          # Đường dẫn lưu trữ dữ liệu Elasticsearch.
+path.logs: .\logs          # Đường dẫn lưu trữ các file nhật ký (log).
+path.repo: .\repository    # Đường dẫn đến nơi lưu trữ các bản sao lưu dữ liệu Elasticsearch (repository).
 
 # ----------------------------------- Memory -----------------------------------
 # Cấu hình này ngăn Elasticsearch bị hoán đổi bộ nhớ (swap) khi có bộ nhớ vật lý không đủ. 
@@ -64,7 +72,9 @@ bootstrap.memory_lock: true
 
 # Tính năng bảo mật của X-Pack bị tắt. X-Pack là gói mở rộng của Elasticsearch cung cấp tính năng bảo mật, giám sát và machine learning.
 xpack.security.enabled: false
+
 # Elasticsearch đang sử dụng giấy phép thử nghiệm (trial) cho X-Pack.
 xpack.license.self_generated.type: trial
+
 # SSL/TLS cho giao tiếp giữa các node trong cụm bị tắt.
 xpack.security.transport.ssl.enabled: false
